@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "imagekit": "^6.0.0",
+    "multer": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/multer": "^1.4.13"
+  }
+}
