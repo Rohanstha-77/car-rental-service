@@ -1,65 +1,85 @@
 "use client";
-
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
+import {assets} from "../../../config/assets"
 
 export default function SignInForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [email,setEmail] = useState("")
+  const [password,setPassword] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-
-    const res = await signIn("credentials", {
-      redirect: false, // important: handle redirect manually
+  const handleSubmit = async(e:React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    const responseFromNextauth = await signIn("credentials",{
       email,
-      password,
-    });
+      password
+    })
+    console.log(responseFromNextauth)
+  }
 
-    if (res?.error) {
-      setError(res.error);
-    } else if (res?.ok) {
-      // You can redirect manually on success:
-      window.location.href = "/dashboard"; // or "/"
-    }
-  };
+  const handleLoginWithGoogle = () => {
+    signIn("google", { callbackUrl: "/" });
 
+  }
+
+
+  
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 320, margin: "auto" }}>
-      <div>
-        <label htmlFor="email">Email</label><br />
-        <input
-          id="email"
-          type="email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-          autoComplete="email"
-          style={{ width: "100%", padding: 8, marginBottom: 12 }}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label><br />
-        <input
-          id="password"
-          type="password"
-          value={password}
-          required
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
-          style={{ width: "100%", padding: 8, marginBottom: 12 }}
-        />
-      </div>
-      <button type="submit" style={{ width: "100%", padding: 10 }}>
-        Sign In
-      </button>
-      {error && (
-        <p style={{ color: "red", marginTop: 12 }}>
-          {error}
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="bg-white text-gray-500 max-w-96 mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">
+        <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
+          Welcome back
+        </h2>
+        <form>
+          <input
+            id="email"
+            className="w-full bg-transparent border my-3 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
+          <input
+            id="password"
+            className="w-full bg-transparent border mt-1 border-gray-500/30 outline-none rounded-full py-2.5 px-4"
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
+          <div className="text-right py-4">
+            <a className="text-blue-600 underline" href="#">
+              Forgot Password
+            </a>
+          </div>
+          <button
+            type="submit"
+            className="w-full mb-3 bg-indigo-500 py-2.5 rounded-full text-white"
+            onClick={handleSubmit}
+          >
+            Log in
+          </button>
+        </form>
+        <p className="text-center mt-4">
+          Don’t have an account?{" "}
+          <a href="#" className="text-blue-500 underline">
+            Signup
+          </a>
         </p>
-      )}
-    </form>
+        <button
+          type="button"
+          className="w-full flex items-center gap-2 justify-center mt-5 bg-black py-2.5 rounded-full text-white"
+          onClick={handleLoginWithGoogle}
+        >
+          <img
+            className="h-4 w-4"
+            src={assets.gmail_logo}
+            alt="appleLogo"
+          />
+          Log in with Google
+        </button>
+      </div>
+    </div>
   );
 }

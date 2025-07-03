@@ -2,24 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
-  const token = await getToken({ req:req, secret: process.env.NEXTSECRECT });
+  const token = await getToken({ req, secret: process.env.NEXTSECRECT });
   const url = req.nextUrl;
-  console.log(process.env.NEXTSECRECT)
 
-  console.log("Middleware token:", token);
-  console.log("Middleware url:", url.pathname);
-
-  // Redirect logged-in users away from /signin page
-  if (token && url.pathname.startsWith("/signin")) {
+  // ✅ 1. If user is logged in and visiting /signin, redirect to 
+  if (token && url.pathname === "/signin") {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
+  // ✅ 2. If user is not logged in and visiting a protected route (like /)
+  if (!token && url.pathname !== "/signin") {
+    return NextResponse.redirect(new URL("/signin", req.url));
+  }
+
+  // ✅ 3. Otherwise, let them through
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/signin", // protect signin for redirect logic
-    "/hello", // protect this route, add more routes here
-  ],
+  matcher: ["/", "/signin"], // Add more protected routes here
 };
