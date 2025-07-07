@@ -1,5 +1,5 @@
 import logo from "../../public/assets/logo.svg";
-import gmail_logo from "../../public/assets/gmail_logo.svg";
+import gmail_logo from "../../public/assets/icons8-google-96.png";
 import facebook_logo from "../../public/assets/facebook_logo.svg";
 import instagram_logo from "../../public/assets/instagram_logo.svg";
 import twitter_logo from "../../public/assets/twitter_logo.svg";

@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../utils/generateToken.js";
 export const register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
-        if (!name || !password || !email) {
+        const { username, email, password } = req.body;
+        if (!username || !password || !email) {
             res.json({ success: false, message: "Fill all the fileds" });
             return;
         }
@@ -14,9 +14,11 @@ export const register = async (req, res) => {
             return;
         }
         const hasedPassword = await bcrypt.hash(password, 10);
-        const insertUser = await userModel.create({ name, email, password: hasedPassword });
-        const token = generateToken(insertUser._id.toString());
-        res.json({ success: true, token });
+        const insertUser = await userModel.create({ username, email, password: hasedPassword });
+        if (!insertUser)
+            return console.log("fail to insert user in db");
+        // const token = generateToken((insertUser._id as Types.ObjectId).toString())
+        res.json({ success: true, message: "successfully register" });
     }
     catch (error) {
         console.log("error while register", error);

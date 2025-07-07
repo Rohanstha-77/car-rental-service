@@ -11,12 +11,14 @@
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/mongoose": "^5.11.96",
+    "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "mongoose": "^8.16.1",
     "next": "15.3.4",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

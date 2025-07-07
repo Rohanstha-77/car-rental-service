@@ -14,9 +14,9 @@ declare global {
 
 export const register = async(req:Request,res:Response):Promise<void> => {
     try {
-        const {name,email,password} = req.body
+        const {username,email,password} = req.body
 
-        if(!name || !password|| !email){
+        if(!username || !password|| !email){
             res.json({success: false,message:"Fill all the fileds"})
             return
         }
@@ -27,11 +27,12 @@ export const register = async(req:Request,res:Response):Promise<void> => {
             return
         }
         const hasedPassword = await bcrypt.hash(password,10)
-        const insertUser = await userModel.create({name,email,password:hasedPassword})
+        const insertUser = await userModel.create({username,email,password:hasedPassword})
+        if(!insertUser) return console.log("fail to insert user in db")
 
-        const token = generateToken((insertUser._id as Types.ObjectId).toString())
+        // const token = generateToken((insertUser._id as Types.ObjectId).toString())
 
-        res.json({success:true, token})
+        res.json({success:true, message:"successfully register"})
 
 
     } catch (error) {

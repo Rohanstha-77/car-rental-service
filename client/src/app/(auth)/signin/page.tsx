@@ -1,28 +1,26 @@
 "use client";
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
-import {assets} from "../../../config/assets"
+import { assets } from "../../../config/assets";
+import Image from "next/image";
 
 export default function SignInForm() {
-  const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async(e:React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    const responseFromNextauth = await signIn("credentials",{
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const responseFromNextauth = await signIn("credentials", {
       email,
-      password
-    })
-    console.log(responseFromNextauth)
-  }
+      password,
+    });
+    console.log(responseFromNextauth);
+  };
 
   const handleLoginWithGoogle = () => {
     signIn("google", { callbackUrl: "/" });
+  };
 
-  }
-
-
-  
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white text-gray-500 max-w-96 mx-4 md:p-6 p-4 text-left text-sm rounded-xl shadow-[0px_0px_10px_0px] shadow-black/10">
@@ -36,7 +34,7 @@ export default function SignInForm() {
             type="email"
             placeholder="Enter your email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
@@ -45,7 +43,7 @@ export default function SignInForm() {
             type="password"
             placeholder="Enter your password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <div className="text-right py-4">
@@ -63,7 +61,7 @@ export default function SignInForm() {
         </form>
         <p className="text-center mt-4">
           Don’t have an account?{" "}
-          <a href="#" className="text-blue-500 underline">
+          <a href="/register" className="text-blue-500 underline">
             Signup
           </a>
         </p>
@@ -72,10 +70,12 @@ export default function SignInForm() {
           className="w-full flex items-center gap-2 justify-center mt-5 bg-black py-2.5 rounded-full text-white"
           onClick={handleLoginWithGoogle}
         >
-          <img
-            className="h-4 w-4"
-            src={assets.gmail_logo}
-            alt="appleLogo"
+          <Image
+            className="h-6 w-6"
+            width={30}
+            height={30}
+            src={"/assets/icons8-google-96.png"}
+            alt="Logo"
           />
           Log in with Google
         </button>
