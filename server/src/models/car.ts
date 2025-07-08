@@ -1,21 +1,5 @@
 import mongoose, { Document, model, Schema, Types } from "mongoose";
-
-export interface CarTypes extends Document {
-    owner: Types.ObjectId,
-    brand: string,
-    Model: string,
-    image: string,
-    year: Number,
-    category: string,
-    seating_capacity: Number,
-    fuel_type: string,
-    transmission: string,
-    pricePerDay: Number,
-    location: string,
-    description: string,
-    isAvailable: Boolean,
-    isDeleted: Boolean
-}
+import { CarTypes } from "../types";
 
 const carSchema = new Schema<CarTypes>({
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },

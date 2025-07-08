@@ -5,8 +5,7 @@ import { imagekit } from "../config/imageKit.js";
 import { carModel } from "../models/car.js";
 import { UploadResponse } from "imagekit/dist/libs/interfaces/UploadResponse.js";
 import { UploadOptions } from "imagekit/dist/libs/interfaces/UploadOptions.js";
-
-
+import { IUser, user } from "../types/index.js";
 
 
 
@@ -131,3 +130,23 @@ export const deleteCar = async(req:Request,res:Response):Promise<void> => {
     }
 }
 
+
+//  API to get Dashbord data
+
+export const getDashboardData = async (req:Request, res:Response): Promise<void> => {
+    try {
+        const user = req.user as unknown as IUser
+        const userId = user?._id
+        const role = user?.role 
+
+        if(role!== "owner") {
+            res.json({ sucess: false, message: "unauthorize"})
+            return
+        }
+
+        const cars = await carModel.find({owner: userId})
+    } catch (error) {
+        console.log("Error from Dashboard Api", error)
+        res.json({sucess: false, message: error})
+    }
+}

@@ -9,6 +9,8 @@ declare global {
   namespace Express {
     interface Request {
       user?: Document;
+      _id?: Document,
+      role?: string
     }
   }
 }

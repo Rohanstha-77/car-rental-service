@@ -99,4 +99,21 @@ export const deleteCar = async (req, res) => {
         console.log("error while getting owners car details", error);
     }
 };
+//  API to get Dashbord data
+export const getDashboardData = async (req, res) => {
+    try {
+        const user = req.user;
+        const userId = user?._id;
+        const role = user?.role;
+        if (role !== "owner") {
+            res.json({ sucess: false, message: "unauthorize" });
+            return;
+        }
+        const cars = await carModel.find({ owner: userId });
+    }
+    catch (error) {
+        console.log("Error from Dashboard Api", error);
+        res.json({ sucess: false, message: error });
+    }
+};
 //# sourceMappingURL=owner.controller.js.map

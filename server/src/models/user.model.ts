@@ -1,13 +1,5 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-
-
-export interface user extends Document {
-    username: string,
-    email: string,
-    password: string,
-    role: 'admin' | 'user',
-    image: string
-}
+import { user } from "../types";
 
 const userSchema = new Schema<user>({
     username: {type: String, required:true},

@@ -37,7 +37,7 @@ export const logIn = async (req, res) => {
             res.json({ sucess: false, message: "invaild email or password" });
             return;
         }
-        const token = generateToken(user._id.toString());
+        const token = generateToken(user._id.toString(), user.role);
         res.json({ sucess: true, token });
     }
     catch (error) {

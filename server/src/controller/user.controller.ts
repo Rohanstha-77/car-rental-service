@@ -53,7 +53,7 @@ export const logIn = async(req:Request, res:Response):Promise<void> => {
             res.json({sucess:false, message: "invaild email or password"})
             return
         }
-        const token = generateToken((user._id as Types.ObjectId).toString())
+        const token = generateToken((user._id as Types.ObjectId).toString(),user.role)
 
         res.json({sucess: true, token})
     } catch (error) {
