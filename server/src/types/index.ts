@@ -24,9 +24,9 @@ export interface CarTypes extends Document {
     isAvailable: Boolean,
     isDeleted: Boolean
 }
-export interface IUser {
+export interface IUser extends Document {
   _id: string;
-  role: string;
+  role: "user" | "owner";
 }
 
 export interface Booking extends Document{

@@ -24,7 +24,12 @@ export const authMiddleware = async (req, res, next) => {
             res.json({ success: false, message: "invalid user" });
             return;
         }
-        req.user = await userModel.findById(verifyToken.id).select("-password"); //it will exclude the password file 
+        const user = await userModel.findById(verifyToken.id).select("-password").lean(); //it will exclude the password file 
+        if (!user) {
+            res.status(401).json({ success: false, message: "User not found" });
+            return;
+        }
+        req.user = user;
         next();
     }
     catch (error) {

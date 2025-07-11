@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Types } from "mongoose";
 import bookingModel from "../models/booking";
 import { carModel } from "../models/car";
+import { IUser } from "../types";
 
 
 const checkAvailability = async (
@@ -81,3 +82,62 @@ export const createBooking = async (req: Request, res: Response): Promise<void> 
         res.json({ sucess: false, message: error })
     }
 }
+
+export const getUserBookings = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = req.user?._id
+        const bookings = await bookingModel.find({ user: userId }).populate("Cars Detail").sort({ createdAt: -1 })
+
+        res.json({ sucess: true, bookings })
+    } catch (error) {
+        console.log("error in getuserbooking", error)
+        res.json({ sucess: false, message: error })
+    }
+}
+
+
+export const getOwnerBookings = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const role = req.user as IUser
+        if (role?.role !== "owner") {
+            res.json({ sucess: false, message: "unauthorized" })
+            return
+        }
+
+        const booking = await bookingModel.find({ owner: req.user?._id }).populate("cars Details user").select("-user.password").sort({ createdAt: -1 })
+
+        res.json({ sucess: true, booking })
+    } catch (error) {
+        console.log("error in getuserbooking", error)
+        res.json({ sucess: false, message: error })
+    }
+}
+
+
+export const changeBookingStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = req.user?._id
+        const { bookingId, status } = req.body
+
+        const booking = await bookingModel.findById(bookingId)
+
+        if (!booking) {
+            res.status(404).json({ success: false, message: "Booking not found" });
+            return;
+        }
+
+        if (booking?.owner.toString() !== userId) {
+            res.json({ sucess: false, message: "unauthorized" })
+            return
+        }
+
+        booking.status = status
+        await booking?.save()
+
+        res.json({ sucess: true, booking })
+    } catch (error) {
+        console.log("error in getuserbooking", error)
+        res.json({ sucess: false, message: error })
+    }
+}
+
